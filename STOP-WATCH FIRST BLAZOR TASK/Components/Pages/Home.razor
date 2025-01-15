@@ -6,11 +6,11 @@
     <div style="font-size: 2rem; margin: 20px;">
         @elapsedTime
     </div>
-    <div style="margin-bottom: 20px;">
-        <button @onclick="StartTimer" disabled="@isRunning">Start</button>
-        <button @onclick="StopTimer" disabled="@(!isRunning)">Stop</button>
-        <button @onclick="LapTime" disabled="@(!isRunning)">Lap</button>
-        <button @onclick="ResetTimer">Reset</button>
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <button @onclick="StartTimer" disabled="@isRunning" class="stopwatch-button start-button">Start</button>
+        <button @onclick="StopTimer" disabled="@(!isRunning)" class="stopwatch-button stop-button">Stop</button>
+        <button @onclick="LapTime" disabled="@(!isRunning)" class="stopwatch-button lap-button">Lap</button>
+        <button @onclick="ResetTimer" class="stopwatch-button reset-button">Reset</button>
     </div>
     <div>
         <h4>Laps:</h4>
@@ -22,6 +22,59 @@
         </ul>
     </div>
 </div>
+
+<style>
+    .stopwatch-button {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .stopwatch-button:disabled {
+            cursor: not-allowed;
+            background-color: #ddd;
+            color: #aaa;
+        }
+
+    .start-button {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .start-button:hover {
+            background-color: #218838;
+        }
+
+    .stop-button {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .stop-button:hover {
+            background-color: #c82333;
+        }
+
+    .lap-button {
+        background-color: #ffc107;
+        color: white;
+    }
+
+        .lap-button:hover {
+            background-color: #e0a800;
+        }
+
+    .reset-button {
+        background-color: #007bff;
+        color: white;
+    }
+
+        .reset-button:hover {
+            background-color: #0056b3;
+        }
+</style>
 @code {
     private System.Timers.Timer timer;
     private DateTime startTime;
