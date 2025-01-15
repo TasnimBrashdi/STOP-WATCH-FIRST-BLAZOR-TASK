@@ -1,7 +1,80 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Stopwatch</PageTitle>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+<div style="display: flex; flex-direction: column; align-items: center;">
+    <div style="font-size: 2rem; margin: 20px;">
+        @elapsedTime
+    </div>
+    <div style="margin-bottom: 20px;">
+        <button @onclick="StartTimer" disabled="@isRunning">Start</button>
+        <button @onclick="StopTimer" disabled="@(!isRunning)">Stop</button>
+        <button @onclick="LapTime" disabled="@(!isRunning)">Lap</button>
+        <button @onclick="ResetTimer">Reset</button>
+    </div>
+    <div>
+        <h4>Laps:</h4>
+        <ul>
+            @foreach (var lap in laps)
+            {
+                <li>@lap</li>
+            }
+        </ul>
+    </div>
+</div>
+@code {
+    private System.Timers.Timer timer;
+    private DateTime startTime;
+    private TimeSpan elapsed;
+    private string elapsedTime = "00:00:00.000";
+    private bool isRunning = false;
+    private List<string> laps = new List<string>();
+    protected override void OnInitialized()
+    {
+        timer = new System.Timers.Timer(100);
+        timer.Elapsed += OnTimerElapsed;
+    }
+    private void StartTimer()
+    {
+        if (!isRunning)
+        {
+            startTime = DateTime.Now - elapsed;
+            timer.Start();
+            isRunning = true;
+        }
+    }
+    private void StopTimer()
+    {
+        if (isRunning)
+        {
+            timer.Stop();
+            elapsed = DateTime.Now - startTime;
+            isRunning = false;
+        }
+    }
+    private void ResetTimer()
+    {
+        timer.Stop();
+        elapsed = TimeSpan.Zero;
+        elapsedTime = "00:00:00.000";
+        isRunning = false;
+        laps.Clear();
+    }
+    private void LapTime()
+    {
+        if (isRunning)
+        {
+            laps.Add(elapsedTime);
+        }
+    }
+    private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        elapsed = DateTime.Now - startTime;
+        elapsedTime = elapsed.ToString("hh\\:mm\\:ss\\.fff");
+        InvokeAsync(StateHasChanged);
+    }
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+}

@@ -1,3 +1,4 @@
+using MudBlazor.Services;
 using STOP_WATCH_FIRST_BLAZOR_TASK.Components;
 
 namespace STOP_WATCH_FIRST_BLAZOR_TASK
@@ -11,7 +12,7 @@ namespace STOP_WATCH_FIRST_BLAZOR_TASK
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
-
+            builder.Services.AddMudServices();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
